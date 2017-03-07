@@ -1,9 +1,5 @@
 import MySQLdb
-
-HOST = "localhost"
-USER = "devel"
-PASSWORD = "devel"
-NAME = "stockmarketupdates"
+from Credentials import *
 
 def getStockList():
     db = MySQLdb.connect(host=HOST,

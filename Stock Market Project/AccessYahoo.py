@@ -1,9 +1,7 @@
 import urllib2, urllib, json
 import requests
 from requests_oauthlib import OAuth1
-
-CLIENTKEY = 'dj0yJmk9b2dIcVhnbXNGdVdZJmQ9WVdrOVFrWlZUV3hQTkdFbWNHbzlNQS0tJnM9Y29uc3VtZXJzZWNyZXQmeD1hNQ--'
-CLIENTSECRET = '6cc877ab42a0c65fb61ce4b18c3b0e276accb090'
+from Credentials import *
 
 baseurl = "https://query.yahooapis.com/v1/yql?"
 
