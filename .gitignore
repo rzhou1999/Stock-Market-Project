@@ -242,3 +242,4 @@ ModelManifest.xml
 .fake/
 
 Credentials.py
+*.pyc
