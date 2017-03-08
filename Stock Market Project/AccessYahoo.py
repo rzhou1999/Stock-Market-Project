@@ -1,9 +1,13 @@
 import urllib2, urllib, json
 import requests
+import ConfigParser
 from requests_oauthlib import OAuth1
-from Credentials import *
 
 baseurl = "https://query.yahooapis.com/v1/yql?"
+Config = ConfigParser.ConfigParser()
+Config.read('credentials.ini')
+CLIENTKEY = Config.get('YQLAuth','CLIENTKEY')
+CLIENTSECRET = Config.get('YQLAuth','CLIENTSECRET')
 
 def queryFromList(input):
     if len(input) == 0:

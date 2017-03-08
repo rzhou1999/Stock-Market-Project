@@ -1,5 +1,12 @@
 import MySQLdb
-from Credentials import *
+import ConfigParser
+
+Config = ConfigParser.ConfigParser()
+Config.read('credentials.ini')
+HOST = Config.get('DBLogIn','HOST')
+USER = Config.get('DBLogIn','USER')
+PASSWORD = Config.get('DBLogIn','PASSWORD')
+NAME = Config.get('DBLogIn','NAME')
 
 def getStockList():
     db = MySQLdb.connect(host=HOST,
