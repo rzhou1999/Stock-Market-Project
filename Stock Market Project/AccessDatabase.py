@@ -28,9 +28,13 @@ def insert(article):
                      db=NAME)
     cursor = db.cursor()
 
+    matches = cursor.execute("SELECT source FROM results WHERE name=%s", (article.source))
+    if len(matches)!= 0:
+        return
+
     try:
         query = """
-            INSERT INTO basic_python_database
+            INSERT INTO results
             ('stock_fk', 'date_retrieved','retrieved_from','event_date','score')
             VALUES
             ('%(fk)', '%(retrieve)','%(source)','%(date)','%(score)')

@@ -1,5 +1,12 @@
 from AccessDatabase import *
 from AccessYahoo import *
+from ArticleAnalyzer import *
+
+def createArticleList(dictObject):
+    listOfArticles = []
+    for art in dictObject['query']['results']['Articles']['Article']:
+        listOfArticles.append(article(art['Summary'], art['Content'], dictObject['query']['created'], art['GUID'], art['PubDate']))
+    return listOfArticles
 
 listFromDB = getStockList()
 print listFromDB
