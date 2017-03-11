@@ -21,25 +21,33 @@ def getStockList():
     db.close()
     return map(lambda x:x[0], temp)
 
-def insert(article):
+def getKey(symbol):
+    db = MySQLdb.connect(host=HOST,
+    user=USER,
+    passwd=PASSWORD,
+    db=NAME)
+    cursor = db.cursor()
+    cursor.execute("SELECT stocks_pk FROM stocks WHERE stock_name=%s", symbol)
+    temp = cursor.fetchall()
+    db.close()
+    return temp[0][0]
+
+def insertResult(article):
     db = MySQLdb.connect(host=HOST,
                      user=USER,
                      passwd=PASSWORD,
                      db=NAME)
     cursor = db.cursor()
-
-    matches = cursor.execute("SELECT source FROM results WHERE name=%s", (article.source))
-    if len(matches)!= 0:
+    matches = cursor.execute("SELECT retrieved_from FROM results WHERE retrieved_from=%s", (article.source))
+    if matches != 0L:
         return
 
-    try:
-        query = """
+    query = """
             INSERT INTO results
             ('stock_fk', 'date_retrieved','retrieved_from','event_date','score')
             VALUES
-            ('%(fk)', '%(retrieve)','%(source)','%(date)','%(score)')
-            """ % {'fk': article.fk, 'retrieve': article.retrieveDate, 'source': article.source, 'date': article.date, 'score':article.score}
-        cursor.execute(query)
-        self.connection.commit()
-    except:
-        self.connection.rollback()
+            (%s, '%s','%s','%s',%s)
+            """ % (article.fk, article.retrieveDate, article.source, article.date, article.score)
+    cursor.execute(query)
+    db.commit()
+    db.close()
