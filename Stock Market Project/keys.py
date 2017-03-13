@@ -1,7 +1,6 @@
-splitKeywords = {
-    "split" : 100,
-    "announce" : 50,
-    "stock" : 100,
-    "share" : 25,
-    "reverse" : 10
+keywords = {
+    "split" : 1,
+    "announce" : 1,
+    "stock" : 1,
+    "reverse" : 1
     }

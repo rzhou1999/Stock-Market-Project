@@ -32,6 +32,10 @@ def getKey(symbol):
     db.close()
     return temp[0][0]
 
+def insertList(articles):
+    for i in articles:
+        insertResult(i)
+
 def insertResult(article):
     db = MySQLdb.connect(host=HOST,
                      user=USER,
@@ -42,12 +46,7 @@ def insertResult(article):
     if matches != 0L:
         return
 
-    query = """
-            INSERT INTO results
-            ('stock_fk', 'date_retrieved','retrieved_from','event_date','score')
-            VALUES
-            (%s, '%s','%s','%s',%s)
-            """ % (article.fk, article.retrieveDate, article.source, article.date, article.score)
+    query = ("INSERT INTO results (symbol,stock_fk, date_retrieved,retrieved_from,event_date,score) VALUES ('%s',%s, '%s','%s','%s',%s)" % (article.symbol, article.fk, article.retrieveDate, article.source, article.date, article.score))
     cursor.execute(query)
     db.commit()
     db.close()
