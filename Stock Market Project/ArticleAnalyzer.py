@@ -14,8 +14,9 @@ class article:
         self.score = self.evaluate()
 
     def evaluate(self):
+        formatted = self.contents.translate(None, string.punctuation).lower()
         splitScore = 0
         for key in keywords:
-            if key in self.contents:
+            if key in formatted:
                 splitScore = splitScore + keywords[key]
         return splitScore
