@@ -46,7 +46,7 @@ def insertResult(article):
     if matches != 0L:
         return
 
-    query = ("INSERT INTO results (symbol,stock_fk, date_retrieved,retrieved_from,event_date,score) VALUES ('%s',%s, '%s','%s','%s',%s)" % (article.symbol, article.fk, article.retrieveDate, article.source, article.date, article.score))
+    query = ("INSERT INTO results (symbol,stock_fk, date_retrieved,retrieved_from,event_date,score,contents) VALUES ('%s',%s, '%s','%s','%s',%s,'%s')" % (article.symbol, article.fk, article.retrieveDate, article.source, article.date, article.score, article.contents[:8192]))
     cursor.execute(query)
     db.commit()
     db.close()
