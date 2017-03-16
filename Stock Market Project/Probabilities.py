@@ -45,5 +45,5 @@ def generateProbabilities():
     sortedL = sorted(finalD.items(), key=lambda x: x[1])
     keys = open("keys.py","w")
     keys.write("#"+str(len(finalD)))
-    keys.write("{" + ','.join(map(lambda i:"\n'"+i[0]+"': "+str(i[1]),sortedL))+"\n}")
+    keys.write("\nkeys={" + ','.join(map(lambda i:"\n'"+i[0]+"': "+str(i[1]),sortedL))+"\n}")
     keys.close()
