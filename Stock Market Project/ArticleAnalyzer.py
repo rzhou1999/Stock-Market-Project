@@ -16,7 +16,7 @@ class article:
 
     def evaluate(self):
         splitScore = 0
-        for key in keywords:
+        for key in keys:
             if key in self.contents:
-                splitScore = splitScore + keywords[key]
+                splitScore = splitScore + keys[key]
         return splitScore
