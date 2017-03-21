@@ -11,7 +11,6 @@ def generateProbabilities():
     words = file("20", "r").read().split("@@@@")
     if len(fromDB[0])!=0:
         words.extend(fromDB[0])
-    print words
     articleList = map(lambda x:list(set(x.translate(None, string.punctuation).lower().split())),words)
     x = []
     for article in articleList:
@@ -42,6 +41,7 @@ def generateProbabilities():
         finalD[i] = (splitD[i] - notSplitD.get(i, 0))/20.0
     for i in notSplitD:
         finalD[i] = (-notSplitD[i] + splitD.get(i, 0))/20.0
+    print "Total tokens recorded: " + str(len(finalD))
     sortedL = sorted(finalD.items(), key=lambda x: x[1])
     keys = open("keys.py","w")
     keys.write("#"+str(len(finalD)))

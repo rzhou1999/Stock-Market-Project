@@ -15,8 +15,9 @@ def queryFromList(input):
     if len(input) == 0:
         raise ValueError('0 element list provided.')
     returnList = []
-    for i in input:
-        returnList.append(querySingle(i))
+    for i in range(len(input)):
+        returnList.append(querySingle(input[i]))
+        print "Query " + str(i+1) + " of " + str(len(input)) + " complete."
     return returnList
 
 #queries the yahoo API with a given symbol input

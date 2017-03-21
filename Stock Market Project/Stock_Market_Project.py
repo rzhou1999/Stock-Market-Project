@@ -2,6 +2,7 @@ from AccessDatabase import *
 from AccessYahoo import *
 from ArticleAnalyzer import *
 from Probabilities import *
+import time
 
 def createArticleList(dictObject, symbolList):
     dictObject = filter(lambda x:len(x)!=0 and x['query']['results']['Articles'].get('Article', 0) != 0,dictObject)
@@ -12,8 +13,6 @@ def createArticleList(dictObject, symbolList):
         for art in singleDictObject['query']['results']['Articles']['Article']:
             listOfArticles.append(article(singleDictObject['query']['results']['Articles']['Symbol'],art['Summary'], art['Content'], singleDictObject['query']['created'], art['GUID'], art['PubDate']))
     return listOfArticles
-#generateProbabilities()
-listFromDB = getStockList()
 
 def loadJsonSafe(jsonString):
     try:
@@ -22,9 +21,19 @@ def loadJsonSafe(jsonString):
         return {}
     return json_object
 
-decodedJSON = map(lambda x:loadJsonSafe(x),queryFromList(listFromDB))
-temp = createArticleList(decodedJSON, listFromDB)
-insertList(temp)
-#print decodedJSON[0]['query']['results']['Articles']['Article'][0]['Summary'].encode('utf-8')
-#print ""
-#print decodedJSON[1]['query']['results']['Articles']['Article'][0]['Summary'].encode('utf-8')
+def mainQuery():
+    start = time.time()
+    listFromDB = getStockList()
+    decodedJSON = map(lambda x:loadJsonSafe(x),queryFromList(listFromDB))
+    temp = createArticleList(decodedJSON, listFromDB)
+    insertList(temp)
+    print str(time.time() - start) + " seconds to complete."
+    
+
+commandLookup = {'load':generateProbabilities,
+                 'main':mainQuery,
+                 'quit': lambda : None}
+command = ""
+while command != "quit":
+    command = raw_input("Command:")
+    commandLookup[command]()
