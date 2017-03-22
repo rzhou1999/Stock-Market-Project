@@ -24,13 +24,16 @@ def loadJsonSafe(jsonString):
 def mainQuery():
     start = time.time()
     listFromDB = getStockList()
+    print str(time.time() - start) + " seconds to complete stock list retrieval."
     decodedJSON = map(lambda x:loadJsonSafe(x),queryFromList(listFromDB))
+    print str(time.time() - start) + " seconds to complete YQL queries."
     temp = createArticleList(decodedJSON, listFromDB)
     insertList(temp)
     print str(time.time() - start) + " seconds to complete."
     
 
-commandLookup = {'load':generateProbabilities,
+commandLookup = {'loadDB':generateProbabilitiesDB,
+                 'load':generateProbabilities,
                  'main':mainQuery,
                  'quit': lambda : None}
 command = ""
