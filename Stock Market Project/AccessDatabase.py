@@ -27,9 +27,9 @@ def getLikelyArticles():
     passwd=PASSWORD,
     db=NAME)
     cursor = db.cursor()
-    cursor.execute("SELECT contents FROM results WHERE score>5.0") #Change number to use new strictness
+    cursor.execute("SELECT contents FROM results WHERE score>17.0") #Change number to use new strictness
     splits = cursor.fetchall()
-    cursor.execute("SELECT contents FROM results WHERE score<0.5") #Change number to use new strictness
+    cursor.execute("SELECT contents FROM results WHERE score<17.0") #Change number to use new strictness
     notSplits = cursor.fetchall()
     db.close()
     return [map(lambda x:x[0], splits),map(lambda x:x[0], notSplits)]
