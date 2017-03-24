@@ -2,6 +2,12 @@ import collections
 import string
 from AccessDatabase import *
 
+
+hardCoded={'split':2.0,
+           'stock split':2.0,
+           'reverse split':2.0}
+
+
 def generateProbabilitiesDB():
     generateProbabilities(getLikelyArticles())
 
@@ -30,6 +36,36 @@ def generateProbabilities(fromDB = [[],[]]):
     counter = collections.Counter(x)
     notSplits = counter.most_common(80)
 
+    #splits articles up into 2-word tokens. Current implementation uses a seperate list to keep track of individual tokens and is
+    #inefficient. Smaller scale, this is fine, should be changed to hash table.
+    tokens2 = []
+    for article in words:
+        i = 1;
+        wordsInArticle = article.split()
+        alreadyDone = []
+        while i < len(wordsInArticle)-2:
+            temp = wordsInArticle[i].translate(None, string.punctuation).lower()+" "+wordsInArticle[i+1].translate(None, string.punctuation).lower()
+            if not temp in alreadyDone:
+                tokens2.append(temp)
+                alreadyDone.append(temp)
+            i=i+1
+    counter = collections.Counter(tokens2)
+    splits2 = counter.most_common(40)
+
+    tokensN2 = []
+    for article in wordsN:
+        i = 1;
+        wordsInArticle = article.split()
+        alreadyDone = []
+        while i < len(wordsInArticle)-2:
+            temp = wordsInArticle[i].translate(None, string.punctuation).lower()+" "+wordsInArticle[i+1].translate(None, string.punctuation).lower()
+            if not temp in alreadyDone:
+                tokensN2.append(temp)
+                alreadyDone.append(temp)
+            i=i+1
+    counter = collections.Counter(tokensN2)
+    splitsN2 = counter.most_common(40)
+
     stopwords = ['all', 'just', 'being', 'over', 'both', 'through', 'yourselves', 'its', 'before', 'herself', 'had', 'should', 'to', 'only', 'under', 'ours', 'has', 'do', 'them', 'his', 'very', 'they', 'not', 'during', 'now', 'him', 'nor', 'did', 'this', 'she', 'each', 'further', 'where', 'few', 'because', 'doing', 'some', 'are', 'our', 'ourselves', 'out', 'what', 'for', 'while', 'does', 'above', 'between', 't', 'be', 'we', 'who', 'were', 'here', 'hers', 'by', 'on', 'about', 'of', 'against', 's', 'or', 'own', 'into', 'yourself', 'down', 'your', 'from', 'her', 'their', 'there', 'been', 'whom', 'too', 'themselves', 'was', 'until', 'more', 'himself', 'that', 'but', 'don', 'with', 'than', 'those', 'he', 'me', 'myself', 'these', 'up', 'will', 'below', 'can', 'theirs', 'my', 'and', 'then', 'is', 'am', 'it', 'an', 'as', 'itself', 'at', 'have', 'in', 'any', 'if', 'again', 'no', 'when', 'same', 'how', 'other', 'which', 'you', 'after', 'most', 'such', 'why', 'a', 'off', 'i', 'yours', 'so', 'the', 'having', 'once']
     splits = filter(lambda x:not x[0] in stopwords,splits)[:40]
     notSplits = filter(lambda x:not x[0] in stopwords,notSplits)[:40]
@@ -38,11 +74,25 @@ def generateProbabilities(fromDB = [[],[]]):
     splitD = dict(splits)
     notSplitD = dict(notSplits)
     finalD = {}
+    split2D = dict(splits2)
+    splitN2D = dict(splitsN2)
+
+    for i in split2D:
+        finalD[i] = (split2D[i] - splitN2D.get(i, 0))/(len(words)*1.0)
+    for i in splitN2D:
+        finalD[i] = (-splitN2D[i] + split2D.get(i, 0))/(len(wordsN)*1.0)
 
     for i in splitD:
         finalD[i] = (splitD[i] - notSplitD.get(i, 0))/(len(words)*1.0)
     for i in notSplitD:
         finalD[i] = (-notSplitD[i] + splitD.get(i, 0))/(len(wordsN)*1.0)
+    
+    for i in hardCoded:
+        if i in finalD:
+            finalD[i] = finalD[i]+hardCoded[i]
+        else:
+            finalD[i] = hardCoded[i]
+
     print "Total tokens recorded: " + str(len(finalD))
     sortedL = sorted(finalD.items(), key=lambda x: x[1])
     keys = open("keys.py","w")
