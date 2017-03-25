@@ -1,7 +1,7 @@
 from keys import *
 from AccessDatabase import *
 import string
-
+#class article, used for easier access to contents and other data to be inserted into the database.
 class article:
     def __init__(self, symbol, summary, contents, retrieveDate, source, date):
         self.fk = getKey(symbol)
@@ -13,7 +13,7 @@ class article:
         temp = date[:-13].split(' ')
         self.date = '-'.join([temp[2],temp[0].zfill(2),temp[1].zfill(2)])
         self.score = self.evaluate()
-
+    #additively combines keys
     def evaluate(self):
         splitScore = 0
         for key in keys:

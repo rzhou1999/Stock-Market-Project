@@ -13,7 +13,7 @@ def generateProbabilitiesDB():
 
 #when called, will take in input from files "20" and "20n", and then look up relevant articles in the database that fit some criteria defined in AccessDatabase.py
 #probability is then taken from each set of articles by putting all of their contents into a set and then counting them
-#stopwords are filtered out, and the top 20 of each are then combined to create a final probability for each token
+#stopwords are filtered out, and the most occuring of each are then combined to create a final probability for each token
 #these are then writtem to keys.py
 def generateProbabilities(fromDB = [[],[]]):
     words = file("20", "r").read().split("@@@@")
